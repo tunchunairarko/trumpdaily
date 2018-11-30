@@ -1,6 +1,6 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-
+import singleNewsCrawler
 class CNNScrapper:
     def __init__(self):
         self.driver=webdriver.PhantomJS()
