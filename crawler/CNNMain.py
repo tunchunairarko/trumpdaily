@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import singleNewsCrawler
 import MySQLdb
 import json
-import http.client, configparser
+import configparser
 class CNNScrapper:
     def __init__(self):
         self.driver=webdriver.PhantomJS('/phantomjs')

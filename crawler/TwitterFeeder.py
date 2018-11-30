@@ -4,6 +4,7 @@ import MySQLdb
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import time
+import configparser
 class TrumpTweeterScrapper:
     def __init__(self):
         self.trumpACUrls=[
