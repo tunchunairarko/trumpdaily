@@ -1,8 +1,6 @@
 # TRUMP DAILY
 
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
-
 Trump daily is a crawler that crawls the top 25 news contents that contains the top-featured man on the planet, US President Donald Trump. Currently, the crawler crawls from
 
   - CNN
