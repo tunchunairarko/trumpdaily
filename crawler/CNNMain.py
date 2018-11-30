@@ -2,12 +2,14 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import singleNewsCrawler
 import MySQLdb
+import json
 class CNNScrapper:
     def __init__(self):
         self.driver=webdriver.PhantomJS('/phantomjs')
         self.rooturl='https://www.cnn.com/'
         self.trumpUrls=[]
         self.newsContents=[]
+        config=json.load('config.json')
         self.priorityIndex=0
         self.singleNewsScrapper=singleNewsCrawler.singleCNNNews()
     def postInDB(self):
