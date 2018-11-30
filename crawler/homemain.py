@@ -1,12 +1,15 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import singleNewsCrawler
+import MySQLdb
 class CNNScrapper:
     def __init__(self):
         self.driver=webdriver.PhantomJS()
         self.rooturl='https://www.cnn.com/'
         self.trumpUrls=[]
+        self.newsContents=[]
         self.priorityIndex=0
+        self.singleNewsScrapper=singleNewsCrawler.singleCNNNews()
     def crawl(self):
         #crawl homepage
         try:
@@ -32,7 +35,10 @@ class CNNScrapper:
             return
         source=self.driver.page_source
         self.crawlUS(source)
-
+        #now get all the title and description
+        for i in range(len(self.trumpUrls)):
+            data=self.singleNewsScrapper.getContents(self.trumpUrls[i])
+            self.newsContents.append(data)
     def crawlUS(self,source):
         polSoup=BeautifulSoup(source,'lxml')
         headlines=polSoup.find_all('h3',class_='cd__headline')

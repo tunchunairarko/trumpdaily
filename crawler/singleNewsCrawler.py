@@ -18,6 +18,7 @@ class singleCNNNews:
         description = self.driver.find_element_by_xpath("//meta[@name='description']")
         # print(description.get_attribute("content"))
         # description=self.__getDescription(source)
+        return {'title':title,'sypnosis':description,'url':url}
     def __getTitle(self,source):
         soup=BeautifulSoup(source,'lxml')
         tiEle=soup.find('title')
