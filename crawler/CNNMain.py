@@ -11,10 +11,10 @@ class CNNScrapper:
         self.priorityIndex=0
         self.singleNewsScrapper=singleNewsCrawler.singleCNNNews()
     def postInDB(self):
-        conn=MySQLdb.connect('localhost','trump','Trump@1234','trumpdaily')
+        conn=MySQLdb.connect('localhost','','','trumpdaily',charset="utf8")
         c=conn.cursor()
         c.execute('TRUNCATE table cnnTop25News')
-        if(len(self.newsContents)>25):
+        if(len(self.newsContents)>30):
             self.newsContents=self.newsContents[:24]
         print(len(self.newsContents))
         for i in range(len(self.newsContents)):
@@ -49,7 +49,10 @@ class CNNScrapper:
         #now get all the title and description
         for i in range(len(self.trumpUrls)):
             data=self.singleNewsScrapper.getContents(self.trumpUrls[i])
-            self.newsContents.append(data)
+            if (data=='Error'):
+                continue
+            else:
+                self.newsContents.append(data)
         self.postInDB()
     def crawlUS(self,source):
         polSoup=BeautifulSoup(source,'lxml')
