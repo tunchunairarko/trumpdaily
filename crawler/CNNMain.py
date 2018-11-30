@@ -1,23 +1,24 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import CNNNewsCrawler
+import singleNewsCrawler
 import MySQLdb
 class CNNScrapper:
     def __init__(self):
-        self.driver=webdriver.PhantomJS()
+        self.driver=webdriver.PhantomJS('/phantomjs')
         self.rooturl='https://www.cnn.com/'
         self.trumpUrls=[]
         self.newsContents=[]
         self.priorityIndex=0
-        self.singleNewsScrapper=CNNNewsCrawler.singleCNNNews()
+        self.singleNewsScrapper=singleNewsCrawler.singleCNNNews()
     def postInDB(self):
-        conn=MySQLdb.connect('localhost','','','trumpdaily')
+        conn=MySQLdb.connect('localhost','trump','Trump@1234','trumpdaily')
         c=conn.cursor()
         c.execute('TRUNCATE table cnnTop25News')
         if(len(self.newsContents)>25):
             self.newsContents=self.newsContents[:24]
+        print(len(self.newsContents))
         for i in range(len(self.newsContents)):
-            c.execute('INSERT into cnnTop25News (title,dsc,postUri) VALUES (%s,%s,%s);',(self.newsContents[i]['title'],self.newsContents[i]['description'],self.newsContents[i]['url']))
+            c.execute('INSERT into cnnTop25News (title,dsc,long_dsc,postUri) VALUES (%s,%s,%s,%s);',(self.newsContents[i]['title'],self.newsContents[i]['summary'],self.newsContents[i]['description'],self.newsContents[i]['url']))
         conn.commit()
         conn.close()
     def crawl(self):
@@ -49,7 +50,7 @@ class CNNScrapper:
         for i in range(len(self.trumpUrls)):
             data=self.singleNewsScrapper.getContents(self.trumpUrls[i])
             self.newsContents.append(data)
-        
+        self.postInDB()
     def crawlUS(self,source):
         polSoup=BeautifulSoup(source,'lxml')
         headlines=polSoup.find_all('h3',class_='cd__headline')
@@ -61,7 +62,7 @@ class CNNScrapper:
                 urlDOM=soup2.find('a')
                 # data={'headline':hdln.text,'url':self.rooturl+urlDOM['href']}
                 self.trumpUrls.append(self.rooturl+urlDOM['href'][1:])
-        self.trumpUrls=set(self.trumpUrls)
+        self.trumpUrls=list(set(self.trumpUrls))
         print(len(self.trumpUrls))    
     def crawlPolitics(self,source):
         polSoup=BeautifulSoup(source,'lxml')
@@ -74,7 +75,7 @@ class CNNScrapper:
                 urlDOM=soup2.find('a')
                 # data={'headline':hdln.text,'url':self.rooturl+urlDOM['href']}
                 self.trumpUrls.append(self.rooturl+urlDOM['href'][1:])
-        self.trumpUrls=set(self.trumpUrls)
+        self.trumpUrls=list(set(self.trumpUrls))
         print(len(self.trumpUrls))
     def crawlHomepage(self,source):
         homeSoup=BeautifulSoup(source,'lxml')
