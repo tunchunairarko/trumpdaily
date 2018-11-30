@@ -12,11 +12,11 @@ class singleCNNNews:
         except:
             return
         source=self.driver.page_source
-        
-        title=self.driver.find_element_by_xpath("//title").
-        print(title)
-        priceValue = self.driver.find_element_by_xpath("//meta[@name='description']")
-        print(priceValue.get_attribute("content"))
+        title=self.__getTitle(source)
+        # title=self.driver.find_element_by_xpath("//title").
+        # print(title)
+        description = self.driver.find_element_by_xpath("//meta[@name='description']")
+        # print(description.get_attribute("content"))
         # description=self.__getDescription(source)
     def __getTitle(self,source):
         soup=BeautifulSoup(source,'lxml')
