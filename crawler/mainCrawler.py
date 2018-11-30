@@ -1,5 +1,5 @@
-import CNNMain
-import TwitterFeeder
+import CNNMain #CNN Crawler Class
+import TwitterFeeder #Twitter Tweet ID Crawler Class
 
 def main():
     c=CNNMain.CNNScrapper()
