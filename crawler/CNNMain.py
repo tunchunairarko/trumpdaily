@@ -3,17 +3,23 @@ from bs4 import BeautifulSoup
 import singleNewsCrawler
 import MySQLdb
 import json
+import http.client, configparser
 class CNNScrapper:
     def __init__(self):
         self.driver=webdriver.PhantomJS('/phantomjs')
         self.rooturl='https://www.cnn.com/'
         self.trumpUrls=[]
         self.newsContents=[]
-        config=json.load('config.json')
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+        self.host=config.get('CREDENTIALS','host')
+        self.uname=config.get('CREDENTIALS','username')
+        self.pwd=config.get('CREDENTIALS','password')
+        self.dbName=config.get('CREDENTIALS','database')
         self.priorityIndex=0
         self.singleNewsScrapper=singleNewsCrawler.singleCNNNews()
     def postInDB(self):
-        conn=MySQLdb.connect('localhost','','','trumpdaily',charset="utf8")
+        conn=MySQLdb.connect(self.host,self.uname,self.pwd,self.dbName,charset="utf8")
         c=conn.cursor()
         c.execute('TRUNCATE table cnnTop25News')
         if(len(self.newsContents)>30):

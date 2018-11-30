@@ -10,10 +10,16 @@ class TrumpTweeterScrapper:
             'https://twitter.com/POTUS',
             'https://twitter.com/realDonaldTrump'
         ]
-        self.driver=webdriver.PhantomJS()
+        self.driver=webdriver.PhantomJS('/phantomjs')
         self.trumpIds=[]
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+        self.host=config.get('CREDENTIALS','host')
+        self.uname=config.get('CREDENTIALS','username')
+        self.pwd=config.get('CREDENTIALS','password')
+        self.dbName=config.get('CREDENTIALS','database')
     def postInDB(self):
-        conn=MySQLdb.connect('localhost','','','trumpdaily')
+        conn=MySQLdb.connect(self.host,self.uname,self.pwd,self.dbName,charset="utf8")
         c=conn.cursor()
         c.execute('TRUNCATE table twitterFeeds')
         # if(len(self.trumpIds)>25):
