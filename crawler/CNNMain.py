@@ -9,7 +9,7 @@ class CNNScrapper:
         self.trumpUrls=[]
         self.newsContents=[]
         self.priorityIndex=0
-        self.singleNewsScrapper=singleNewsCrawler.singleCNNNews()
+        self.singleNewsScrapper=CNNNewsCrawler.singleCNNNews()
     def postInDB(self):
         conn=MySQLdb.connect('localhost','','','trumpdaily')
         c=conn.cursor()
