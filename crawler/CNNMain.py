@@ -2,7 +2,6 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import singleNewsCrawler
 import MySQLdb
-import json
 import configparser
 class CNNScrapper:
     def __init__(self):
