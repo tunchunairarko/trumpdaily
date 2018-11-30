@@ -27,7 +27,6 @@ The python libraries and the additional tools that are required to set this proj
 | time 1.0.0 | Default python library to add delays into twitter scrapping | [https://pypi.org/project/time/][PlGa] |
 
 
-
    [PlDb]: <https://www.mysql.com/>
    [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
    [PlGd]: <https://pypi.org/project/selenium/>
