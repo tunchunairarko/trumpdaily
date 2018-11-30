@@ -11,6 +11,7 @@ class CNNScrapper:
         #crawl homepage
         try:
             self.driver.get(self.rooturl)
+            self.driver.execute_script("window.scrollTo(0, 2000);")
         except:
             return
         source=self.driver.page_source
@@ -18,13 +19,46 @@ class CNNScrapper:
         #crawl politics
         try:
             self.driver.get(self.rooturl+'politics')
+            self.driver.execute_script("window.scrollTo(0, 2000);")
         except:
             return
         source=self.driver.page_source
         self.crawlPolitics(source)
-        
+        #crawl us
+        try:
+            self.driver.get(self.rooturl+'us')
+            self.driver.execute_script("window.scrollTo(0, 2000);")
+        except:
+            return
+        source=self.driver.page_source
+        self.crawlUS(source)
+
+    def crawlUS(self,source):
+        polSoup=BeautifulSoup(source,'lxml')
+        headlines=polSoup.find_all('h3',class_='cd__headline')
+        for i in range(len(headlines)):
+            spn=str(headlines[i].contents)
+            soup2=BeautifulSoup(spn,'lxml')
+            hdln=soup2.find('span',class_='cd__headline-text')
+            if(hdln.text.lower().find('trump')>-1) and not (hdln.text.lower().find('ivanka')>-1) and not (hdln.text.lower().find('melania')>-1):
+                urlDOM=soup2.find('a')
+                # data={'headline':hdln.text,'url':self.rooturl+urlDOM['href']}
+                self.trumpUrls.append(self.rooturl+urlDOM['href'][1:])
+        self.trumpUrls=set(self.trumpUrls)
+        print(len(self.trumpUrls))    
     def crawlPolitics(self,source):
-        pass    
+        polSoup=BeautifulSoup(source,'lxml')
+        headlines=polSoup.find_all('h3',class_='cd__headline')
+        for i in range(len(headlines)):
+            spn=str(headlines[i].contents)
+            soup2=BeautifulSoup(spn,'lxml')
+            hdln=soup2.find('span',class_='cd__headline-text')
+            if(hdln.text.lower().find('trump')>-1) and not (hdln.text.lower().find('ivanka')>-1) and not (hdln.text.lower().find('melania')>-1):
+                urlDOM=soup2.find('a')
+                # data={'headline':hdln.text,'url':self.rooturl+urlDOM['href']}
+                self.trumpUrls.append(self.rooturl+urlDOM['href'][1:])
+        self.trumpUrls=set(self.trumpUrls)
+        print(len(self.trumpUrls))
     def crawlHomepage(self,source):
         homeSoup=BeautifulSoup(source,'lxml')
         headlines=homeSoup.find_all('h3',class_='cd__headline')
@@ -38,8 +72,8 @@ class CNNScrapper:
                 urlDOM=soup2.find('a')
                 # data={'headline':hdln.text,'url':self.rooturl+urlDOM['href']}
                 self.trumpUrls.append(self.rooturl+urlDOM['href'][1:])
-        self.trumpUrls=set(self.trumpUrls)
-        print(self.trumpUrls)
+        self.trumpUrls=list(set(self.trumpUrls))
+        print(len(self.trumpUrls))
         
 def main():
     c=CNNScrapper()
